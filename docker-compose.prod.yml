@@ -1,0 +1,58 @@
+version: '3.7'
+
+services:
+  api:
+    image: "${API_IMAGE}"
+    container_name: api
+    restart: unless-stopped
+    ports:
+      - 5000
+    environment:
+      - FLASK_ENV=production
+      - APP_SETTINGS=project.config.ProductionConfig
+      - DATABASE_URL=${DATABASE_URL}
+      - SECRET_KEY=${SECRET_KEY}
+
+  client:
+    image: "${CLIENT_IMAGE}"
+    container_name: client
+    restart: unless-stopped
+    ports:
+      - 3000
+    depends_on:
+      - api
+  
+  dtpl-db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    ports:
+      - 5436:5432
+    environment:
+      - POSTGRES_USER=${pg-user}
+      - POSTGRES_PASSWORD=${pg-pass}
+
+  nginx:
+    image: lscr.io/linuxserver/swag
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Jakarta
+      - URL=${NGINX_HTTPS_URL}
+      - SUBDOMAINS=wildcard
+      - VALIDATION=dns
+      - EMAIL=${NGINX_HTTPS_URL}
+    volumes:
+      - </path/to/appdata/config>:/config
+    ports:
+      - 443:443
+      - 80:80 
+    restart: unless-stopped
+    depends_on:
+      - api
+      - client
+
+  
