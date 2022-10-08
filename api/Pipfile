@@ -1,0 +1,24 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+fastapi-sqlalchemy = "*"
+pydantic = "*"
+alembic = "*"
+asyncpg = "*"
+python-dotenv = "*"
+psycopg2 = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
+
+[packages.databases]
+extras = [ "postgresql",]
+
+[packages.uvicorn]
+extras = [ "standard",]
