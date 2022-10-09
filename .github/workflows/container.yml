@@ -6,32 +6,55 @@ on:
       - 'main'
 
 jobs:
-  docker-hub-push:
+  # docker-hub-push:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+  #     - name: Login to DockerHub
+  #       uses: docker/login-action@v2
+  #       with:
+  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #     - name: Build and push client to dockerhub
+  #       uses: docker/build-push-action@v3
+  #       with:
+  #         context: ./client
+  #         file: ./client/Dockerfile-prod
+  #         push: true
+  #         tags: agasyan/vilage-system-client:latest, agasyan/vilage-system-client:v${{github.run_number}}
+  #     - name: Build and push api to dockerhub
+  #       uses: docker/build-push-action@v3
+  #       with:
+  #         context: ./api
+  #         push: true
+  #         tags: agasyan/vilage-system-api:latest, agasyan/vilage-system-api:v${{github.run_number}}
+  #     - name: Build and push db to dockerhub
+  #       uses: docker/build-push-action@v3
+  #       with:
+  #         context: ./db
+  #         push: true
+  #         tags: agasyan/vilage-system-db:latest, agasyan/vilage-system-db:v${{github.run_number}}
+  deploy-digital-ocean:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Login to DockerHub
-        uses: docker/login-action@v2
+      - uses: actions/checkout@master
+      - name: Init .env file
+        uses: appleboy/ssh-action@v0.1.5
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push client to dockerhub
-        uses: docker/build-push-action@v3
+          host: ${{ secrets.SSH_HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          username: ${{ secrets.USERNAME }}
+          script: |
+            mkdir -p village-system
+            cd village-system
+            echo PG_USER=${{ secrets.PG_USER }} > .env
+            whoami
+      - name: Copy file via scp
+        uses: appleboy/scp-action@v0.1.3
         with:
-          context: ./client
-          file: ./client/Dockerfile-prod
-          push: true
-          tags: agasyan/vilage-system-client:latest, agasyan/vilage-system-client:v${{github.run_number}}
-      - name: Build and push api to dockerhub
-        uses: docker/build-push-action@v3
-        with:
-          context: ./api
-          push: true
-          tags: agasyan/vilage-system-api:latest, agasyan/vilage-system-api:v${{github.run_number}}
-      - name: Build and push db to dockerhub
-        uses: docker/build-push-action@v3
-        with:
-          context: ./db
-          push: true
-          tags: agasyan/vilage-system-db:latest, agasyan/vilage-system-db:v${{github.run_number}}
+          host: ${{ secrets.SSH_HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          username: ${{ secrets.USERNAME }}
+          source: "docker-compose.prod.yml"
+          target: "village-system"
