@@ -12,7 +12,5 @@ COPY . /usr/src/app
 RUN npm run build --production
 
 EXPOSE 3000
-WORKDIR /app
-COPY --from=builder /usr/src/app .
 
 CMD ["npm", "start"]
