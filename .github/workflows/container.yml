@@ -51,7 +51,7 @@ jobs:
       - name: Init .env
         uses: SpicyPizza/create-envfile@v1.3
         with:
-          envkey_PG_USER: ${{ secrets.SECRET_KEY }}
+          envkey_PG_USER: ${{ secrets.PG_USER }}
       - name: Copy file via scp
         uses: appleboy/scp-action@v0.1.3
         with:
