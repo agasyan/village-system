@@ -20,6 +20,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./client
+          file: ./client/Dockerfile-prod
           push: true
           tags: agasyan/vilage-system-client:latest, agasyan/vilage-system-client:v${{github.run_number}}
       - name: Build and push api to dockerhub
