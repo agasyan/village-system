@@ -76,5 +76,5 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           script: |
             docker-compose down
-            docker-compose up -d
+            docker compose up -f docker-compose.prod.yml
             docker system prune -f
