@@ -1,39 +1,37 @@
 version: '3.7'
 
 services:
-  # api:
-  #   image: "${API_IMAGE}"
-  #   container_name: api
-  #   restart: unless-stopped
-  #   command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 5000 --reload"
-  #   ports:
-  #     - 5000
-  #   environment:
-  #     - DATABASE_URL=${DATABASE_URL}
-  #     - SECRET_KEY=${SECRET_KEY}
-  #   networks:
-  #     - nginx_network
+  api:
+    image: ${API_IMAGE}:latest
+    container_name: api
+    restart: unless-stopped
+    command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 5000 --reload"
+    ports:
+      - 5000
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - SECRET_KEY=${SECRET_KEY}
+    networks:
+      - nginx_network
 
-  # client:
-  #   image: "${CLIENT_IMAGE}"
-  #   container_name: client
-  #   restart: unless-stopped
-  #   ports:
-  #     - 3000
-  #   depends_on:
-  #     - api
-  #   networks:
-  #     - nginx_network
+  client:
+    image: ${CLIENT_IMAGE}:latest
+    container_name: client
+    restart: unless-stopped
+    ports:
+      - 3000
+    depends_on:
+      - api
+    networks:
+      - nginx_network
   
-  # dtpl-db:
-  #   build:
-  #     context: ./db
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - 5436:5432
-  #   environment:
-  #     - POSTGRES_USER=${PG_USER}
-  #     - POSTGRES_PASSWORD=${PG_PASS}
+  dtpl-db:
+    image: ${DB_IMAGE}:latest
+    ports:
+      - 5436:5432
+    environment:
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASS}
 
   nginx:
     image: lscr.io/linuxserver/swag
@@ -55,8 +53,8 @@ services:
       - 443:443
       - 80:80 
     restart: unless-stopped
-    # depends_on:
-    #   - api
-    #   - client
+    depends_on:
+      - api
+      - client
 
   
