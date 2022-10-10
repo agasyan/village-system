@@ -75,5 +75,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           username: ${{ secrets.SSH_USERNAME }}
           script: |
+            cd village-system
             docker-compose -f docker-compose.prod.yml up -d --force-recreate
             docker system prune -f
