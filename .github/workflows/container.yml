@@ -36,6 +36,7 @@ jobs:
           push: true
           tags: agasyan/vilage-system-db:latest, agasyan/vilage-system-db:v${{github.run_number}}
   deploy-digital-ocean:
+    needs: docker-hub-push
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
