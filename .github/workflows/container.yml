@@ -68,3 +68,13 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           source: "docker-compose.prod.yml,.env"
           target: "village-system"
+      - name: Re-run Docker Compose
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          username: ${{ secrets.SSH_USERNAME }}
+          script: |
+            docker-compose down
+            docker-compose up -d
+            docker system prune -f
