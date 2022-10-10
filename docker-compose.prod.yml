@@ -6,22 +6,19 @@ services:
     container_name: api
     restart: unless-stopped
     command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 5000 --reload"
-    ports:
-      - 5000
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - SECRET_KEY=${SECRET_KEY}
     networks:
       - nginx_network
+    depends_on:
+      dtpl-db:
+        condition: service_healthy
 
   client:
     image: ${CLIENT_IMAGE}:latest
     container_name: client
     restart: unless-stopped
-    ports:
-      - 3000
-    depends_on:
-      - api
     networks:
       - nginx_network
   
@@ -32,6 +29,15 @@ services:
     environment:
       - POSTGRES_USER=${PG_USER}
       - POSTGRES_PASSWORD=${PG_PASS}
+    volumes:
+      - ./volumes/postgres-data:/var/lib/postgresql/data
+    networks:
+      - nginx_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   nginx:
     image: lscr.io/linuxserver/swag
@@ -46,6 +52,7 @@ services:
       - SUBDOMAINS=wildcard
       - VALIDATION=dns
       - EMAIL=${NGINX_HTTPS_EMAIL}
+      - DNSPLUGIN=digitalocean
     volumes: 
       - /etc/localtime:/etc/localtime:ro
       - /etc/config/swag:/config
@@ -56,5 +63,9 @@ services:
     depends_on:
       - api
       - client
+    networks:
+      - nginx_network
 
-  
+networks:
+  nginx_network:
+    driver: bridge
