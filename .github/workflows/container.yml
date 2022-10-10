@@ -69,7 +69,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           source: "docker-compose.prod.yml,.env"
           target: "village-system"
-      - name: Re-run Docker Compose
+      - name: Re-run Docker Compose and remove unused image
         uses: appleboy/ssh-action@v0.1.5
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -78,4 +78,4 @@ jobs:
           script: |
             cd village-system
             docker-compose -f docker-compose.prod.yml up -d --force-recreate
-            docker system prune -f
+            docker image prune -a -f
