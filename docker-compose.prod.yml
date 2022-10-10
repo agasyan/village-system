@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   api:
-    image: ${API_IMAGE}:latest
+    image: ${API_IMAGE}:v${BUILD_VERSION}
     container_name: api
     restart: unless-stopped
     command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 5000 --reload"
@@ -16,14 +16,14 @@ services:
         condition: service_healthy
 
   client:
-    image: ${CLIENT_IMAGE}:latest
+    image: ${CLIENT_IMAGE}:v${BUILD_VERSION}
     container_name: client
     restart: unless-stopped
     networks:
       - nginx_network
   
   dtpl-db:
-    image: ${DB_IMAGE}:latest
+    image: ${DB_IMAGE}:v${BUILD_VERSION}
     ports:
       - 5436:5432
     environment:
