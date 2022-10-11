@@ -36,11 +36,8 @@ if config.config_file_name is not None:
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
-db_url = ""
-db_url = os.environ["DATABASE_URL"]
-if db_url == "":
-    db_url = os.environ["DATABASE_URL_ENV"]
-config.set_main_option("sqlalchemy.url", os.environ["DATABASE_URL"])
+db_url = os.environ.get("DATABASE_URL")
+config.set_main_option("sqlalchemy.url", db_url)
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
