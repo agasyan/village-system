@@ -1,33 +1,76 @@
-import sqlalchemy
-from db import db, metadata, sqlalchemy
+import sqlalchemy as sa
+from db import db, metadata
+from sqlalchemy.orm import relationship
 
-document_types = sqlalchemy.Table(
+document_types = sa.Table(
     "document_type",
     metadata,
-    sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True),
-    sqlalchemy.Column("name", sqlalchemy.String, unique=True),
-    sqlalchemy.Column("desc", sqlalchemy.String),
-    __table_args__ = {'extend_existing': True} 
+    sa.Column("id", sa.Integer, primary_key=True),
+    sa.Column("name", sa.String, unique=True),
+    sa.Column("desc", sa.String),
+    extend_existing = True
 )
 
-document_status = sqlalchemy.Table(
+document_status = sa.Table(
     "document_status",
     metadata,
-    sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True),
-    sqlalchemy.Column("name", sqlalchemy.String, unique=True),
-    sqlalchemy.Column("desc", sqlalchemy.String),
-    __table_args__ = {'extend_existing': True} 
+    sa.Column("id", sa.Integer, primary_key=True),
+    sa.Column("name", sa.String, unique=True),
+    sa.Column("desc", sa.String),
+    extend_existing = True
 )
 
-document = sqlalchemy.Table(
+document = sa.Table(
     "document",
     metadata,
-    id = sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True),
-    judul = sqlalchemy.Column("judul", sqlalchemy.String, unique=True),
-    desc = sqlalchemy.Column("deskripsi", sqlalchemy.String),
-    document_status_id = sqlalchemy.Column("doc_status", sqlalchemy.ForeignKey("document_status.id"), nullable=False),
-    document_type_id = sqlalchemy.Column("doc_type", sqlalchemy.ForeignKey("document_type.id"), nullable=False),
-    __table_args__ = {'extend_existing': True} 
+    sa.Column("id", sa.Integer, primary_key=True),
+    sa.Column("judul", sa.String, unique=True),
+    sa.Column("deskripsi", sa.Text),
+    sa.Column("doc_status_id", sa.ForeignKey("document_status.id"), nullable=False),
+    sa.Column("doc_type_id", sa.ForeignKey("document_type.id"), nullable=False),
+    sa.Column("doc_user_id", sa.ForeignKey("user.id"), nullable=False),
+    extend_existing = True
+)
+
+user = sa.Table(
+    "user",
+    metadata,
+    sa.Column("id", sa.Integer, primary_key=True),
+    sa.Column("username", sa.String, unique=True),
+    sa.Column("hashed_password", sa.Text, nullable=False),
+    extend_existing = True
+)
+
+role = sa.Table(
+    "role",
+    metadata,
+    sa.Column("id", sa.Integer, primary_key=True),
+    sa.Column("name", sa.String, unique=True),
+    extend_existing = True
+)
+
+page = sa.Table(
+    "page",
+    metadata,
+    sa.Column("id", sa.Integer, primary_key=True),
+    sa.Column("name", sa.String, unique=True),
+    extend_existing = True
+)
+
+user_role = sa.Table(
+    "user_role",
+    metadata,
+    sa.Column("user_id", sa.ForeignKey("user.id"), nullable=False),
+    sa.Column("role_id", sa.ForeignKey("role.id"), nullable=False),
+    extend_existing = True
+)
+
+role_page = sa.Table(
+    "role_page",
+    metadata,
+    sa.Column("page_id", sa.ForeignKey("page.id"), nullable=False),
+    sa.Column("role_id", sa.ForeignKey("role.id"), nullable=False),
+    extend_existing = True
 )
 
 class DocumentType:
