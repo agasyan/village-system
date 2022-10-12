@@ -104,27 +104,27 @@ class DocumentType:
 class DocumentStatus:
     @classmethod
     async def get(cls, id):
-        query = document_types.select().where(document_types.c.id == id)
+        query = document_status.select().where(document_status.c.id == id)
         return await db.fetch_one(query)
     
     @classmethod
     async def get_by_name(cls, name):
-        query = document_types.select().where(document_types.c.name == name)
+        query = document_status.select().where(document_status.c.name == name)
         return await db.fetch_one(query)
     
     @classmethod
     async def get_all(cls):
-        query = document_types.select()
+        query = document_status.select()
         return await db.fetch_all(query)
 
     @classmethod
     async def create(cls, **doc_type):
-        query = document_types.insert().values(**doc_type)
+        query = document_status.insert().values(**doc_type)
         doc_type_id = await db.execute(query)
         return doc_type_id
     
     @classmethod
     async def delete(cls, id):
-        query = document_types.delete().where(document_types.c.id == id)
+        query = document_status.delete().where(document_status.c.id == id)
         doc_type_id = await db.execute(query)
         return doc_type_id

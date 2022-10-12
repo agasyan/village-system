@@ -2,6 +2,10 @@
 
 Access api with: http://localhost:8080/api
 Access FE with: http://localhost:8080
+Run with 
+```
+docker-compose up --force-recreate
+```
 
 ## Desc
 

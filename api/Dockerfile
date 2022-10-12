@@ -10,9 +10,7 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /api/
 
 # Install dependencies
-RUN pip install pipenv
-COPY Pipfile Pipfile.lock /api/
-RUN pipenv install --system --dev
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /api/
 

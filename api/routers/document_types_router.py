@@ -2,7 +2,7 @@ from typing import List
 from models import DocumentType as ModelDocumentType
 from schema import DocumentType as SchemaDocumentType
 from schema import DocumentTypes as SchemaDocumentTypes
-from fastapi import Request, APIRouter
+from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
 
