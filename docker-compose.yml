@@ -31,6 +31,8 @@ services:
     command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 5000 --reload"
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      - SECRET_KEY=${SECRET_KEY}
+      - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES}
     depends_on:
       dtpl-db:
         condition: service_healthy

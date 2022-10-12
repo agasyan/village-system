@@ -8,10 +8,9 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /api/
+COPY . /api/
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . /api/
 
 EXPOSE 8000

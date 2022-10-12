@@ -61,6 +61,7 @@ jobs:
           envkey_CLIENT_IMAGE: ${{ secrets.CLIENT_IMAGE }}
           envkey_DB_IMAGE: ${{ secrets.DB_IMAGE }}
           envkey_BUILD_VERSION: ${{ github.run_number }}
+          envkey_ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
       - name: Copy file via scp
         uses: appleboy/scp-action@v0.1.3
         with:
