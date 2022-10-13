@@ -19,8 +19,6 @@ async def create_user_role(user_role: SchemaUserRole):
 @router.get("/all",response_model=List[SchemaUserRoles])
 async def get_all_user_roles():
     urs = await ModelUserRole.get_all()
-    if urs == None:
-        return JSONResponse(content={"error": "No User role relation found"}, status_code=200)
     return urs
 
 @router.get("/{id}", response_model=SchemaUserRoles)
@@ -35,8 +33,8 @@ async def delete_user_role_by_id(id: int):
     user_role = await ModelUserRole.get(id)
     if user_role == None:
         return JSONResponse(content={"error": "User Role id not found"}, status_code=400)
-    user_role_id = await ModelUserRole.delete(id)
-    return user_role_id
+    await ModelUserRole.delete(id)
+    return JSONResponse(content={"message": "Success Delete User Role"}, status_code=200)
 
 @router.get("/{user_id}/roles",response_model=List[SchemaUserRoles])
 async def get_user_role_by_user_id(user_id: int):

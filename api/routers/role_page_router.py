@@ -24,8 +24,6 @@ async def create_role_page(role_page: SchemaRolePage):
 @router.get("/all",response_model=List[SchemaRolePages])
 async def get_all_role_pages():
     role_pages = await ModelRolePage.get_all()
-    if role_pages == None:
-        return JSONResponse(content={"error": "No Role Pages found"}, status_code=200)
     return role_pages
 
 @router.get("/{id}", response_model=SchemaRolePages)
@@ -40,8 +38,8 @@ async def delete_role_page_by_id(id: int):
     role_page = await ModelRolePage.get(id)
     if role_page == None:
         return JSONResponse(content={"error": "Role Page id not found"}, status_code=400)
-    role_page_id = await ModelRolePage.delete(id)
-    return role_page_id
+    await ModelRolePage.delete(id)
+    return JSONResponse(content={"message": "Success Delete Role Page"}, status_code=200)
 
 @router.get("/{role_id}/pages",response_model=List[RolePageByRoleID])
 async def get_role_page_by_role_id(role_id: int):

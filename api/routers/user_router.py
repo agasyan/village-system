@@ -8,7 +8,7 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 
-from models import User as ModelUser, Role as ModelRole, UserRole as ModelUserRole, RolePage as ModelRP, Page as ModelPage
+from models import User as ModelUser, Role as ModelRole, UserRole as ModelUserRole, RolePage as ModelRP, Page as ModelPage, Document as ModelDoc
 from schema import RoleOut as SchemaRoleOutput, PageOut as SchemaPageOut
 from routers.token_router import TokenData as SchemaTokenData
 
@@ -111,6 +111,12 @@ async def delete_user_by_id(id: int):
     user = await ModelUser.get(id)
     if user == None:
         return JSONResponse(content={"error": "user id not found"}, status_code=400)
+    docs = await ModelDoc.get_by_user_id(id)
+    if docs != None:
+        doc_ids = []
+        for doc in docs:
+            doc_ids.append(doc.id)
+        return JSONResponse(content={"error": "User have document and still used", "doc_ids": doc_ids}, status_code=400)
     await ModelUserRole.delete_by_user_id(id)
-    user_id = await ModelUser.delete(id)
-    return user_id
+    await ModelUser.delete(id)
+    return JSONResponse(content={"message": "Success Delete User"}, status_code=200)

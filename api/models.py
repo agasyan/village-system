@@ -100,8 +100,12 @@ class DocumentType:
     @classmethod
     async def delete(cls, id):
         query = document_types.delete().where(document_types.c.id == id)
-        doc_type_id = await db.execute(query)
-        return doc_type_id
+        await db.execute(query)
+    
+    @classmethod
+    async def update(cls, id, **doc_type):
+        query = document_types.update().where(document_types.c.id == id).values(**doc_type)
+        await db.execute(query)
 
 class DocumentStatus:
     @classmethod
@@ -131,6 +135,43 @@ class DocumentStatus:
         doc_type_id = await db.execute(query)
         return doc_type_id
 
+class Document:
+    @classmethod
+    async def get(cls, id):
+        query = document.select().where(document.c.id == id)
+        return await db.fetch_one(query)
+    
+    @classmethod
+    async def get_all(cls):
+        query = document.select()
+        return await db.fetch_all(query)
+    
+    @classmethod
+    async def get_by_document_type_id(cls, doc_type_id):
+        query = document.select().where(document.c.doc_type_id == doc_type_id)
+        return await db.fetch_all(query)
+    
+    @classmethod
+    async def get_by_document_status_id(cls, doc_status_id):
+        query = document.select().where(document.c.doc_status_id == doc_status_id)
+        return await db.fetch_all(query)
+
+    @classmethod
+    async def get_by_user_id(cls, user_id):
+        query = document.select().where(document.c.user_id == user_id)
+        return await db.fetch_all(query)
+
+    @classmethod
+    async def create(cls, **doc_type):
+        query = document.insert().values(**doc_type)
+        doc_type_id = await db.execute(query)
+        return doc_type_id
+    
+    @classmethod
+    async def delete(cls, id):
+        query = document.delete().where(document.c.id == id)
+        await db.execute(query)
+
 class Role:
     @classmethod
     async def get(cls, id):
@@ -156,8 +197,7 @@ class Role:
     @classmethod
     async def delete(cls, id):
         query = role.delete().where(role.c.id == id)
-        role_id = await db.execute(query)
-        return role_id
+        await db.execute(query)
 
 class Page:
     @classmethod
@@ -184,8 +224,7 @@ class Page:
     @classmethod
     async def delete(cls, id):
         query = page.delete().where(page.c.id == id)
-        page_id = await db.execute(query)
-        return page_id
+        await db.execute(query)
 
 class RolePage:
     @classmethod
@@ -222,8 +261,7 @@ class RolePage:
     @classmethod
     async def delete(cls, id):
         query = role.delete().where(role_page.c.id == id)
-        role_page_id = await db.execute(query)
-        return role_page_id
+        await db.execute(query)
 
 class UserRole:
     @classmethod

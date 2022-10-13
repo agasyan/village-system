@@ -19,8 +19,6 @@ async def create_page(page: SchemaPage):
 @router.get("/all",response_model=List[SchemaPages])
 async def get_all_pages():
     pages = await ModelPage.get_all()
-    if pages == None:
-        return JSONResponse(content={"error": "No pages found"}, status_code=200)
     return pages
 
 @router.get("/{id}", response_model=SchemaPages)
@@ -37,9 +35,9 @@ async def delete_page_by_id(page_id: int):
         return JSONResponse(content={"error": "pages id not found"}, status_code=400)
     role_pages = await ModelRolePage.get_by_page_id(page_id)
     if role_pages != None:
-        page_ids = []
+        role_ids = []
         for rp in role_pages:
-            page_ids.append(rp.page_id)
-        return JSONResponse(content={"error": "Pages still used", "role_ids": page_ids}, status_code=400)
-    page_id = await ModelPage.delete(page_id)
-    return page_id
+            role_ids.append(rp.page_id)
+        return JSONResponse(content={"error": "Pages still used", "role_ids": role_ids}, status_code=400)
+    await ModelPage.delete(page_id)
+    return JSONResponse(content={"message": "Success Delete Page"}, status_code=200)

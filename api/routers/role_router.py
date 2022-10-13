@@ -19,8 +19,6 @@ async def create_role(role: SchemaRole):
 @router.get("/all",response_model=List[SchemaRoles])
 async def get_all_roles():
     roles = await ModelRole.get_all()
-    if roles == None:
-        return JSONResponse(content={"error": "No Roles found"}, status_code=200)
     return roles
 
 @router.get("/{id}", response_model=SchemaRoles)
@@ -47,5 +45,5 @@ async def delete_role_by_id(role_id: int):
         for ur in user_roles:
             user_ids.append(ur.user_id)
         return JSONResponse(content={"error": "Roles still used", "user_ids": user_ids}, status_code=400)
-    role_id = await ModelRole.delete(role_id)
-    return role_id
+    await ModelRole.delete(role_id)
+    return JSONResponse(content={"message": "Success Delete Role"}, status_code=200)

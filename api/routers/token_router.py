@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import Type, Union, List
+from typing import Union
 import os
 
 from fastapi import Depends, APIRouter, HTTPException, status

@@ -1,5 +1,5 @@
 from typing import List
-from models import DocumentStatus as ModelDocumentStatus
+from models import DocumentStatus as ModelDocumentStatus, Document as ModelDoc
 from schema import DocumentStatus as SchemaDocumentStatus
 from schema import DocumentStatuses as SchemaDocumentStatuses
 from fastapi import APIRouter
@@ -19,8 +19,6 @@ async def create_document_status(document_status: SchemaDocumentStatus):
 @router.get("/all",response_model=List[SchemaDocumentStatuses])
 async def get_all_doc_status():
     doc_statuses = await ModelDocumentStatus.get_all()
-    if doc_statuses == None:
-        return JSONResponse(content={"error": "No Document statuses found"}, status_code=200)
     return doc_statuses
 
 @router.get("/{id}", response_model=SchemaDocumentStatuses)
@@ -35,7 +33,13 @@ async def delete_doc_status_by_id(id: int):
     document_status = await ModelDocumentStatus.get(id)
     if document_status == None:
         return JSONResponse(content={"error": "id not found"}, status_code=400)
-    document_status_id = await ModelDocumentStatus.delete(id)
-    return document_status_id
+    docs = await ModelDoc.get_by_document_status_id(id)
+    if docs != None:
+        doc_ids = []
+        for doc in docs:
+            doc_ids.append(doc.id)
+        return JSONResponse(content={"error": "Doc Status still used", "doc_ids": doc_ids}, status_code=400)
+    await ModelDocumentStatus.delete(id)
+    return JSONResponse(content={"message": "Success Delete Document Status"}, status_code=200)
 
 
