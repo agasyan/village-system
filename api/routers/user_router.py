@@ -1,33 +1,27 @@
-from datetime import datetime, timedelta
 from typing import Union, List
 import os
 
 from fastapi import Depends, APIRouter, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
-
-from models import User as ModelUser, Role as ModelRole, UserRole as ModelUserRole
-from schema import RoleOut as SchemaRoleOutput
 from fastapi.responses import JSONResponse
+
+from models import User as ModelUser, Role as ModelRole, UserRole as ModelUserRole, RolePage as ModelRP, Page as ModelPage
+from schema import RoleOut as SchemaRoleOutput, PageOut as SchemaPageOut
+from routers.token_router import TokenData as SchemaTokenData
 
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES")
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-
-class TokenData(BaseModel):
-    username: Union[str, None] = None
 
 class User(BaseModel):
     username: str
     full_name: Union[str, None] = None
+
+class UserAll(User):
+    id: int
 
 class UserCreate(User):
     password: str
@@ -35,6 +29,7 @@ class UserCreate(User):
 
 class UserOut(User):
     roles: List[SchemaRoleOutput] = []
+    pages: List[SchemaPageOut] = []
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -45,32 +40,9 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 router =  APIRouter()
 
 
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
-
-
 def get_password_hash(password):
     return pwd_context.hash(password)
 
-
-def authenticate_user(username: str, password: str):
-    user = ModelUser.get_by_username(username)
-    if not user:
-        return False
-    if not verify_password(password, user.hashed_password):
-        return False
-    return user
-
-
-def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
 
 @router.get("/me", response_model=UserOut)
 async def get_current_user(token: str = Depends(oauth2_scheme)):
@@ -84,7 +56,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
-        token_data = TokenData(username=username)
+        token_data = SchemaTokenData(username=username)
     except JWTError:
         raise credentials_exception
     user = await ModelUser.get_by_username(token_data.username)
@@ -92,42 +64,53 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         raise credentials_exception
     user_roles = await ModelUserRole.get_by_user_id(user.id)
     urs_out = []
-    for i in user_roles:
-        role_info = await ModelRole.get(i)
-        role_info_out = SchemaRoleOutput(name=role_info.name, id=role_info.id)
+    pages_out = []
+    for ur in user_roles:
+        role_info = await ModelRole.get(ur.id)
+        role_info_out = SchemaRoleOutput(id=role_info.id, name=role_info.name)
         urs_out.append(role_info_out)
-    out = UserOut(username=user.username,full_name=user.full_name,roles=urs_out)
+
+        role_pages = await ModelRP.get_by_role_id(role_info.id)
+        for rp in role_pages:
+            page_info = await ModelPage.get(rp.page_id)
+            page_out = {"id":page_info.id, "name":page_info.name}
+            if page_out not in pages_out:
+                pages_out.append(page_out)
+    out = UserOut(username=user.username,full_name=user.full_name,roles=urs_out, pages=pages_out)
     return out
 
 
-@router.post("/token", response_model=Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(form_data.username, form_data.password)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
-    )
-    return {"access_token": access_token, "token_type": "bearer"}
-
 @router.post("/registration", status_code=201)
 async def registration(req_reg: UserCreate):
-    if len(req_reg.role_id) == 0:
+    if len(req_reg.role_ids) == 0:
         return JSONResponse(content={"error": "Please add role"}, status_code=400)
     role_ids = []
-    for i in req_reg.role_id:
-        check_role = await ModelRole.get(req_reg.role_id)
+    for i in req_reg.role_ids:
+        check_role = await ModelRole.get(i)
         if check_role == None:
             return JSONResponse(content={"error": "Roles not exist"}, status_code=400)
         if i not in role_ids:
             role_ids.append(i)
-    user_id = await ModelUser.create(username=req_reg.username,full_name=req_reg.full_name,hashed_password=get_password_hash(req_reg.password))
+    fname = ""
+    if req_reg.full_name != None:
+        fname = req_reg.full_name
+    user_id = await ModelUser.create(username=req_reg.username,full_name=fname,hashed_password=get_password_hash(req_reg.password))
     for r_id in role_ids:
         await ModelUserRole.create(user_id=user_id,role_id=r_id)
     return {"user_id": user_id}
 
+@router.get("/all",response_model=List[UserAll])
+async def get_all_users():
+    users = await ModelUser.get_all()
+    if users == None:
+        return JSONResponse(content={"error": "No users found"}, status_code=200)
+    return users
+
+@router.delete("/{id}")
+async def delete_user_by_id(id: int):
+    user = await ModelUser.get(id)
+    if user == None:
+        return JSONResponse(content={"error": "user id not found"}, status_code=400)
+    await ModelUserRole.delete_by_user_id(id)
+    user_id = await ModelUser.delete(id)
+    return user_id

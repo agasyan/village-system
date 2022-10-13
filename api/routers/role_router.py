@@ -1,5 +1,5 @@
 from typing import List
-from models import Role as ModelRole
+from models import Role as ModelRole, RolePage as ModelRolePage, UserRole as ModelUserRole
 from schema import Role as SchemaRole
 from schema import RoleOut as SchemaRoles
 from fastapi import APIRouter
@@ -30,10 +30,22 @@ async def get_role_by_id(id: int):
         return JSONResponse(content={"error": "Roles id not found"}, status_code=400)
     return role
 
-@router.delete("/{id}")
-async def delete_role_by_id(id: int):
-    role = await ModelRole.get(id)
+@router.delete("/{role_id}")
+async def delete_role_by_id(role_id: int):
+    role = await ModelRole.get(role_id)
     if role == None:
         return JSONResponse(content={"error": "Roles id not found"}, status_code=400)
-    role_id = await ModelRole.delete(id)
+    user_roles = await ModelUserRole.get_by_role_id(role_id)
+    role_pages = await ModelRolePage.get_by_role_id(role_id)
+    if role_pages != None:
+        page_ids = []
+        for rp in role_pages:
+            page_ids.append(rp.page_id)
+        return JSONResponse(content={"error": "Roles still used", "page_ids": page_ids}, status_code=400)
+    if user_roles != None:
+        user_ids = []
+        for ur in user_roles:
+            user_ids.append(ur.user_id)
+        return JSONResponse(content={"error": "Roles still used", "user_ids": user_ids}, status_code=400)
+    role_id = await ModelRole.delete(role_id)
     return role_id

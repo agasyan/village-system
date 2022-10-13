@@ -1,5 +1,5 @@
 from typing import List
-from models import Page as ModelPage
+from models import Page as ModelPage, RolePage as ModelRolePage
 from schema import Page as SchemaPage
 from schema import PageOut as SchemaPages
 from fastapi import APIRouter
@@ -30,10 +30,16 @@ async def get_page_by_id(id: int):
         return JSONResponse(content={"error": "pages id not found"}, status_code=400)
     return page
 
-@router.delete("/{id}")
-async def delete_page_by_id(id: int):
-    page = await ModelPage.get(id)
+@router.delete("/{page_id}")
+async def delete_page_by_id(page_id: int):
+    page = await ModelPage.get(page_id)
     if page == None:
         return JSONResponse(content={"error": "pages id not found"}, status_code=400)
-    page_id = await ModelPage.delete(id)
+    role_pages = await ModelRolePage.get_by_page_id(page_id)
+    if role_pages != None:
+        page_ids = []
+        for rp in role_pages:
+            page_ids.append(rp.page_id)
+        return JSONResponse(content={"error": "Pages still used", "role_ids": page_ids}, status_code=400)
+    page_id = await ModelPage.delete(page_id)
     return page_id

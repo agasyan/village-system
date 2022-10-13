@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 0e37d43eba22
+Revision ID: b96f3a1564ca
 Revises: 2c6ba7bfba9c
-Create Date: 2022-10-11 14:37:08.312376
+Create Date: 2022-10-13 00:49:03.901834
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '0e37d43eba22'
+revision = 'b96f3a1564ca'
 down_revision = '2c6ba7bfba9c'
 branch_labels = None
 depends_on = None
@@ -33,6 +33,7 @@ def upgrade() -> None:
     op.create_table('user',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(), nullable=True),
+    sa.Column('full_name', sa.String(), nullable=True),
     sa.Column('hashed_password', sa.Text(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('username')
@@ -51,16 +52,20 @@ def upgrade() -> None:
     sa.UniqueConstraint('judul')
     )
     op.create_table('role_page',
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('page_id', sa.Integer(), nullable=False),
     sa.Column('role_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['page_id'], ['page.id'], ),
-    sa.ForeignKeyConstraint(['role_id'], ['role.id'], )
+    sa.ForeignKeyConstraint(['role_id'], ['role.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user_role',
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('role_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['role_id'], ['role.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], )
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
 
