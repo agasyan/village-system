@@ -15,7 +15,7 @@ async def create_document(new_doc: DocIn):
     check_ds = await ModelDS.get(new_doc.doc_status_id)
     if check_ds == None:
         return JSONResponse(content={"error": "Document Statuses not exist"}, status_code=400)
-    check_user = await ModelUser.get(new_doc.user_id)
+    check_user = await ModelUser.get(new_doc.doc_user_id)
     if check_user == None:
         return JSONResponse(content={"error": "User ID not exist"}, status_code=400)
     document_id = await ModelDocument.create(**new_doc.dict())
@@ -67,7 +67,7 @@ async def update_document(id: int, updated_doc: DocIn):
     check_ds = await ModelDS.get(updated_doc.doc_status_id)
     if check_ds == None:
         return JSONResponse(content={"error": "Document Statuses not exist"}, status_code=400)
-    check_user = await ModelUser.get(updated_doc.user_id)
+    check_user = await ModelUser.get(updated_doc.doc_user_id)
     if check_user == None:
         return JSONResponse(content={"error": "User ID not exist"}, status_code=400)
     await ModelDocument.update(id, **updated_doc.dict())
