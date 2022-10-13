@@ -8,12 +8,9 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /api/
+COPY . /api/
 
 # Install dependencies
-RUN pip install pipenv
-COPY Pipfile Pipfile.lock /api/
-RUN pipenv install --system --dev
-
-COPY . /api/
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8000

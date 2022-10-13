@@ -8,6 +8,13 @@ sudo passwd postgres
 sudo apt-get install --reinstall libpq-dev
 ```
 
+Installing
+```bash
+python3 -m venv env
+source env/bin/activate
+
+```
+
 This used for compiling `psycopg2` if you want to run it on local development
 
 ## Run alembic
@@ -33,4 +40,7 @@ psql -U postgres -h localhost -p 5436
 See docs
 ```
 localhost:5000/docs
+```
+
+Install new dependencies / library
 ```
