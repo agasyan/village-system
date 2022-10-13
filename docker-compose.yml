@@ -9,7 +9,7 @@ services:
       - './client:/usr/src/app'
       - '/usr/src/app/node_modules'
       - /usr/src/app/.next
-    container_name: client-react-ui
+    container_name: client
     stdin_open: true
     networks:
       - nginx_network

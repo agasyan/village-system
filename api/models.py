@@ -171,6 +171,11 @@ class Document:
     async def delete(cls, id):
         query = document.delete().where(document.c.id == id)
         await db.execute(query)
+    
+    @classmethod
+    async def update(cls, id, **doc_type):
+        query = document.update().where(document.c.id == id).values(**doc_type)
+        await db.execute(query)
 
 class Role:
     @classmethod
