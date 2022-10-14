@@ -15,7 +15,7 @@ app.include_router(role_page_router.router, tags=["Role-Page"], prefix="/role-pa
 app.include_router(user_role_router.router, tags=["User-Role"], prefix="/user-role")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
