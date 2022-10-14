@@ -28,9 +28,9 @@ const items = [
     title: 'Customers'
   },
   {
-    href: '/products',
+    href: '/document/request',
     icon: (<ShoppingBagIcon fontSize="small" />),
-    title: 'Products'
+    title: 'Request Document'
   },
   {
     href: '/account',
