@@ -6,6 +6,22 @@ import { DashboardLayout } from '../../components/dashboard-layout';
 import { customers } from '../../__mocks__/customers';
 
 const Page = () => {
+  const [issueList, setIssueList] = useState(issues);
+  const fetchData = () => {
+    axios
+      .get('https://desa.agasyan.my.id/api/issue/all')
+      .then((response) => {
+        const { data } = response;
+        console.log(data)
+        if (response.status === 200) {
+          //check the api call is success by stats code 200,201 ...etc
+          setIssueList(data)
+        } else {
+          //error handle section 
+        }
+      })
+      .catch((error) => console.log(error));
+  };
   return (
     <>
       <Head>
@@ -23,7 +39,7 @@ const Page = () => {
         <Container maxWidth={false}>
           <CustomerListToolbar />
           <Box sx={{ mt: 3 }}>
-            <CustomerListResults customers={customers} />
+            <CustomerListResults issues={issueList} />
           </Box>
         </Container>
       </Box>
