@@ -3,7 +3,6 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import {
-  Avatar,
   Box,
   Card,
   Checkbox,
@@ -15,7 +14,6 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
-import { getInitials } from '../../utils/get-initials';
 
 export const CustomerListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
@@ -81,19 +79,19 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                   />
                 </TableCell>
                 <TableCell>
-                  Name
+                  Title
                 </TableCell>
                 <TableCell>
-                  Email
+                  Description
                 </TableCell>
                 <TableCell>
                   Location
                 </TableCell>
                 <TableCell>
-                  Phone
+                  Status
                 </TableCell>
                 <TableCell>
-                  Registration date
+                  Created date
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -118,28 +116,22 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar
-                        src={customer.avatarUrl}
-                        sx={{ mr: 2 }}
-                      >
-                        {getInitials(customer.name)}
-                      </Avatar>
                       <Typography
                         color="textPrimary"
                         variant="body1"
                       >
-                        {customer.name}
+                        {customer.title}
                       </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {customer.email}
+                    {customer.description}
                   </TableCell>
                   <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                    {`${customer.address}`}
                   </TableCell>
                   <TableCell>
-                    {customer.phone}
+                    {customer.status}
                   </TableCell>
                   <TableCell>
                     {format(customer.createdAt, 'dd/MM/yyyy')}

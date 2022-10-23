@@ -23,9 +23,9 @@ const items = [
     title: 'Dashboard'
   },
   {
-    href: '/customers',
+    href: '/issue/list',
     icon: (<UsersIcon fontSize="small" />),
-    title: 'Customers'
+    title: 'Laporan'
   },
   {
     href: '/document/request',
