@@ -4,9 +4,11 @@ import { CustomerListResults } from '../../components/customer/customer-list-res
 import { CustomerListToolbar } from '../../components/customer/customer-list-toolbar';
 import { DashboardLayout } from '../../components/dashboard-layout';
 import { customers } from '../../__mocks__/customers';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 const Page = () => {
-  const [issueList, setIssueList] = useState(issues);
+  const [issueList, setIssueList] = useState(customers);
   const fetchData = () => {
     axios
       .get('https://desa.agasyan.my.id/api/issue/all')
@@ -22,6 +24,10 @@ const Page = () => {
       })
       .catch((error) => console.log(error));
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <>
       <Head>
@@ -39,7 +45,7 @@ const Page = () => {
         <Container maxWidth={false}>
           <CustomerListToolbar />
           <Box sx={{ mt: 3 }}>
-            <CustomerListResults issues={issueList} />
+            <CustomerListResults customers={issueList} />
           </Box>
         </Container>
       </Box>
