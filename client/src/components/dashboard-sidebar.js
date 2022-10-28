@@ -15,6 +15,7 @@ import { Users as UsersIcon } from '../icons/users';
 import { XCircle as XCircleIcon } from '../icons/x-circle';
 import { Logo } from './logo';
 import { NavItem } from './nav-item';
+import { auth } from "../lib/auth"
 
 const items = [
   {
@@ -57,6 +58,34 @@ const items = [
     icon: (<XCircleIcon fontSize="small" />),
     title: 'Error'
   }
+];
+
+const loggedInItems = [
+  {
+    href: '/',
+    icon: (<ChartBarIcon fontSize="small" />),
+    title: 'Dashboard'
+  },
+  {
+    href: '/customers',
+    icon: (<UsersIcon fontSize="small" />),
+    title: 'Customers'
+  },
+  {
+    href: '/document/request',
+    icon: (<ShoppingBagIcon fontSize="small" />),
+    title: 'Request Document'
+  },
+  {
+    href: '/account',
+    icon: (<UserIcon fontSize="small" />),
+    title: 'Account'
+  },
+  {
+    href: '/settings',
+    icon: (<CogIcon fontSize="small" />),
+    title: 'Settings'
+  },
 ];
 
 export const DashboardSidebar = (props) => {
@@ -152,14 +181,22 @@ export const DashboardSidebar = (props) => {
           }}
         />
         <Box sx={{ flexGrow: 1 }}>
-          {items.map((item) => (
+          {auth() ? loggedInItems.map((item) => (
             <NavItem
               key={item.title}
               icon={item.icon}
               href={item.href}
               title={item.title}
             />
-          ))}
+          )) : items.map((item) => (
+            <NavItem
+              key={item.title}
+              icon={item.icon}
+              href={item.href}
+              title={item.title}
+            />
+          ))
+        }
         </Box>
         <Divider sx={{ borderColor: '#2D3748' }} />
       </Box>
