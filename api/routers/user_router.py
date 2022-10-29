@@ -27,7 +27,7 @@ class UserCreate(User):
     password: str
     role_ids: List[int] = []
 
-class UserOut(User):
+class UserOut(UserAll):
     roles: List[SchemaRoleOutput] = []
     pages: List[SchemaPageOut] = []
 
@@ -76,7 +76,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
             page_out = {"id":page_info.id, "name":page_info.name}
             if page_out not in pages_out:
                 pages_out.append(page_out)
-    out = UserOut(username=user.username,full_name=user.full_name,roles=urs_out, pages=pages_out)
+    out = UserOut(id=user.id, username=user.username, full_name=user.full_name, roles=urs_out, pages=pages_out)
     return out
 
 
