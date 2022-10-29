@@ -75,6 +75,29 @@ role_page = sa.Table(
     extend_existing = True
 )
 
+laporan_status = sa.Table(
+    "laporan_status",
+    metadata,
+    sa.Column("id", sa.Integer, primary_key=True),
+    sa.Column("name", sa.String, unique=True),
+    sa.Column("desc", sa.String),
+    extend_existing = True
+)
+
+laporan = sa.Table(
+    "laporan",
+    metadata,
+    sa.Column("id", sa.Integer, primary_key=True),
+    sa.Column("title", sa.String),
+    sa.Column("deskripsi", sa.Text),
+    sa.Column("laporan_status_id", sa.ForeignKey("laporan_status.id"), nullable=False),
+    sa.Column("created_by", sa.ForeignKey("user.id"), nullable=False),
+    sa.Column("updated_by", sa.ForeignKey("user.id"), nullable=False),
+    sa.Column("created_at_epoch_utc", sa.Integer, nullable=False),
+    sa.Column("updated_at_epoch_utc", sa.Integer, nullable=False),
+    extend_existing = True
+)
+
 class DocumentType:
     @classmethod
     async def get(cls, id):
@@ -323,6 +346,11 @@ class User:
         return await db.fetch_one(query)
     
     @classmethod
+    async def get_by_user_id(cls, userid):
+        query = user.select().where(user.c.id == userid)
+        return await db.fetch_one(query)
+    
+    @classmethod
     async def get_all(cls):
         query = user.select()
         return await db.fetch_all(query)
@@ -339,3 +367,66 @@ class User:
         user_id = await db.execute(query)
         return user_id
     
+class LaporanStatus:
+    @classmethod
+    async def get(cls, id):
+        query = laporan_status.select().where(laporan_status.c.id == id)
+        return await db.fetch_one(query)
+    
+    @classmethod
+    async def get_by_name(cls, name):
+        query = laporan_status.select().where(laporan_status.c.name == name)
+        return await db.fetch_one(query)
+    
+    @classmethod
+    async def get_all(cls):
+        query = laporan_status.select()
+        return await db.fetch_all(query)
+
+    @classmethod
+    async def create(cls, **lap_stat):
+        query = laporan_status.insert().values(**lap_stat)
+        lap_status_id = await db.execute(query)
+        return lap_status_id
+    
+    @classmethod
+    async def delete(cls, id):
+        query = laporan_status.delete().where(laporan_status.c.id == id)
+        await db.execute(query)
+
+class Laporan:
+    @classmethod
+    async def get(cls, id):
+        query = laporan.select().where(laporan.c.id == id)
+        return await db.fetch_one(query)
+    
+    @classmethod
+    async def get_all(cls):
+        query = laporan.select()
+        return await db.fetch_all(query)
+    
+    @classmethod
+    async def get_by_laporan_status_id(cls, doc_status_id):
+        query = laporan.select().where(laporan.c.doc_status_id == doc_status_id)
+        return await db.fetch_all(query)
+
+    @classmethod
+    async def get_by_user_id(cls, user_id):
+        query = laporan.select().where(laporan.c.user_id == user_id)
+        return await db.fetch_all(query)
+
+    @classmethod
+    async def create(cls, **lap):
+        query = laporan.insert().values(**lap)
+        laporan_id = await db.execute(query)
+        return laporan_id
+    
+    @classmethod
+    async def delete(cls, id):
+        query = laporan.delete().where(laporan.c.id == id)
+        await db.execute(query)
+    
+    @classmethod
+    async def update(cls, id, **lap):
+        query = laporan.update().where(laporan.c.id == id).values(**lap)
+        await db.execute(query)
