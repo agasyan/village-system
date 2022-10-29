@@ -44,3 +44,5 @@ localhost:5000/docs
 
 Install new dependencies / library
 ```
+pip freeze > requirements.txt 
+```

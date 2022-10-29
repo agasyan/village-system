@@ -43,7 +43,7 @@ class RolePageOut(RolePage):
 
 class UserRole(BaseModel):
     role_id: int
-    page_id: int
+    user_id: int
 
 class UserRoleOut(UserRole):
     id: int
