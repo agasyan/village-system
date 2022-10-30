@@ -66,7 +66,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     urs_out = []
     pages_out = []
     for ur in user_roles:
-        role_info = await ModelRole.get(ur.id)
+        role_info = await ModelRole.get(ur.role_id)
         role_info_out = SchemaRoleOutput(id=role_info.id, name=role_info.name)
         urs_out.append(role_info_out)
 
