@@ -47,18 +47,3 @@ class UserRole(BaseModel):
 
 class UserRoleOut(UserRole):
     id: int
-
-class DocumentOutput(BaseModel):
-    id: int
-    judul: str
-    deskripsi: str
-    doc_status_id: int
-    doc_type_id: int
-    doc_user_id: int
-
-class DocumentInput(BaseModel):
-    judul: str
-    deskripsi: str
-    doc_status_id: int
-    doc_type_id: int
-    doc_user_id: int

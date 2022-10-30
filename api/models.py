@@ -90,6 +90,7 @@ laporan = sa.Table(
     sa.Column("id", sa.Integer, primary_key=True),
     sa.Column("title", sa.String),
     sa.Column("deskripsi", sa.Text),
+    sa.Column("alamat", sa.String),
     sa.Column("laporan_status_id", sa.ForeignKey("laporan_status.id"), nullable=False),
     sa.Column("created_by", sa.ForeignKey("user.id"), nullable=False),
     sa.Column("updated_by", sa.ForeignKey("user.id"), nullable=False),
