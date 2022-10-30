@@ -145,10 +145,10 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                     {customer.deskripsi}
                   </TableCell>
                   <TableCell>
-                    {`${customer.address}`}
+                    {customer.alamat}
                   </TableCell>
                   <TableCell>
-                    {customer.status}
+                    {customer.laporan_status.laporan_status_name}
                   </TableCell>
                   <TableCell>
                     {formatDate(customer.created_at_utc)}
