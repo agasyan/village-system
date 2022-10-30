@@ -10,9 +10,11 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  FormControl
+  FormControl,
 } from '@mui/material';
 import axios from 'axios';
+import { getUserData } from "../../lib/auth"
+import { Router } from 'next/router';
 
 const Page = () => {
   const [documentTypeList, setDocumentTypeList] = useState([]);
@@ -34,17 +36,20 @@ const Page = () => {
       .catch((error) => console.log(error));
   };
   const submitRequest = (event) => {
-    // todo doc user id
+    event.preventDefault();
     axios
       .post('https://desa.agasyan.my.id/api/doc', {
         judul: docTitle,
         deskripsi: description,
         doc_status_id: 1,
         doc_type_id: docType,
-        doc_user_id: 0
+        doc_user_id: getUserData().id,
       })
       .then((response) => {
-        console.log(response)
+        alert("Berhasil membuat laporan")
+        setDocTitle("")
+        setDescription("")
+        Router.push("/")
       })
       .catch((error) => console.log(error));
     event.preventDefault();
@@ -56,7 +61,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Request Dokumen
+          Request Dokumen KK
         </title>
       </Head>
       <Box
@@ -75,11 +80,11 @@ const Page = () => {
                 color="textPrimary"
                 variant="h4"
               >
-                Request Dokumen
+                Request Dokumen KK
               </Typography>
             </Box>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Tipe Dokumen</InputLabel>
+              <InputLabel id="demo-simple-select-label">Tipe Pengajuan KK</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -99,7 +104,7 @@ const Page = () => {
             </FormControl>
             <TextField
               fullWidth
-              label="Deskripsi"
+              label="Dokumen Pendukung (link google drive)"
               margin="normal"
               name="deskripsi"
               onChange={(event) => { setDescription(event.target.value) }}
@@ -113,10 +118,31 @@ const Page = () => {
                 type="submit"
                 variant="contained"
               >
-                Request Dokumen
+                Request Dokumen KK
               </Button>
             </Box>
           </form>
+          <Typography>
+          DOKUMEN PENDUKUNG PENGAJUAN KK <br></br><br></br>
+1. Pembuatan KK Baru<br></br>
+    1. Surat pengantar dari ketua RT yang sudah ditandatangani ketua RW<br></br>
+    2. Surat keterangan pindah (khusus untuk pendatang)<br></br>
+    3. Fotokopi buku nikah atau akta perkawinan<br></br><br></br>
+2. Penambahan Anggota Keluarga karena Menumpang<br></br>
+    1. Kartu keluarga anggota keluarga menumpang<br></br>
+    2. Kartu keluarga dari keluarga yg ditumpangi<br></br>
+    3. Surat keterangan pindah datang (WNI)<br></br>
+    4. Surat keterangan datang dari luar negeri (WNI dari luar negeri)<br></br>
+    5. Fotokopi buku nikah<br></br>
+    6. Surat keterangan penduduk<br></br><br></br>
+3. Penambahan anggota keluarga karena kelahiran<br></br>
+    1. Kartu keluarga sebelum<br></br>
+    2. Surat nikah orang tua<br></br>
+    3. KTP orang tua<br></br>
+    4. Surat Keterangan lahir<br></br><br></br><br></br>
+
+tiap dokumen silakan di upload pada satu folder google drive dan submit link pada form
+          </Typography>
         </Container>
       </Box>
     </>
