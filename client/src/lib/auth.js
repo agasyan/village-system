@@ -19,3 +19,15 @@ export const auth = () => {
   return undefined;
 
 }
+
+
+export const getUserData = () => {
+  const key = "userData";
+  const userData = JSON.parse(localStorage.getItem(key));
+  if (userData){
+    return userData;
+  }
+  return undefined;
+
+}
+

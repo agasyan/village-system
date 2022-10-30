@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { AppBar, Avatar, Badge, Box, IconButton, Toolbar, Tooltip } from '@mui/material';
@@ -8,6 +8,8 @@ import { Bell as BellIcon } from '../icons/bell';
 import { UserCircle as UserCircleIcon } from '../icons/user-circle';
 import { Users as UsersIcon } from '../icons/users';
 import { AccountPopover } from './account-popover';
+import { auth, getUserData } from "../lib/auth";
+import axios from 'axios';
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -18,6 +20,46 @@ export const DashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
   const settingsRef = useRef(null);
   const [openAccountPopover, setOpenAccountPopover] = useState(false);
+
+  const config = {
+    headers: {
+      "accept": "application/json"
+    }
+  }
+
+  axios.interceptors.request.use(
+    (config) => {
+      const user = auth();
+
+      if (user) {
+        const token = user;
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+      }
+
+      return config;
+    },
+    (error) => Promise.reject(error)
+  );
+
+  const fetchUserData = () => {
+    if (auth()) {
+      axios.get('https://desa.agasyan.my.id/api/user/me', config)
+      .then((response) => {
+        if (response.status === 200) {
+          localStorage.setItem("userData", JSON.stringify(response.data))
+        }else{
+          alert("gagal mengambil data")
+        }
+      })
+      .catch((error) => console.log(error));
+    }
+  }
+
+  useEffect(() => {
+    fetchUserData();
+  }, [])
 
   return (
     <>
