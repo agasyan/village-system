@@ -13,50 +13,54 @@ import {
   FormControl
 } from '@mui/material';
 import axios from 'axios';
+import { getUserData } from "../../lib/auth"
+import { Router } from 'next/router';
 
 const Page = () => {
   const [documentTypeList, setDocumentTypeList] = useState([]);
-  const [docType, setDocType] = useState(0)
   const [docTitle, setDocTitle] = useState("")
   const [description, setDescription] = useState("")
-  const fetchData = () => {
-    axios
-      .get('https://desa.agasyan.my.id/api/doc-type/all')
-      .then((response) => {
-        const { data } = response;
-        if (response.status === 200) {
-          //check the api call is success by stats code 200,201 ...etc
-          setDocumentTypeList(data.map(({ id, name }) => ({ label: id, value: name })))
-        } else {
-          //error handle section
-        }
-      })
-      .catch((error) => console.log(error));
-  };
+  // const fetchData = () => {
+  //   axios
+  //     .get('https://desa.agasyan.my.id/api/laporan-status/all')
+  //     .then((response) => {
+  //       const { data } = response;
+  //       console.log(data)
+  //       if (response.status === 200) {
+  //         //check the api call is success by stats code 200,201 ...etc
+  //         setDocumentTypeList(data.map(({ id, name }) => ({ label: id, value: name })))
+  //       } else {
+  //         //error handle section
+  //       }
+  //     })
+  //     .catch((error) => console.log(error));
+
+  // };
   const submitRequest = (event) => {
-    // todo doc user id
     axios
-      .post('https://desa.agasyan.my.id/api/doc', {
-        judul: docTitle,
+      .post('https://desa.agasyan.my.id/api/laporan', {
+        title: docTitle,
         deskripsi: description,
-        doc_status_id: 1,
-        doc_type_id: docType,
-        doc_user_id: 0
+        laporan_status_id: 1,
+        user_id: getUserData().id
       })
       .then((response) => {
-        console.log(response)
+        alert("Berhasil membuat laporan")
+        setDocTitle("")
+        setDescription("")
+        Router.push("/")
       })
       .catch((error) => console.log(error));
     event.preventDefault();
   }
-  useEffect(() => {
-    fetchData();
-  }, [])
+
+  console.log(getUserData())
+
   return (
     <>
       <Head>
         <title>
-          Request Dokumen
+        Pengajuan Laporan Kemalingan
         </title>
       </Head>
       <Box
@@ -75,28 +79,17 @@ const Page = () => {
                 color="textPrimary"
                 variant="h4"
               >
-                Request Dokumen
+                Pengajuan Laporan Kemalingan
               </Typography>
             </Box>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Tipe Dokumen</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={docType}
-                onChange={(event) => {
-                  setDocType(event.target.value);
-                  const selectedDocumentType = documentTypeList.find(it => it.label === event.target.value);
-                  setDocTitle(selectedDocumentType.value)
-                }}
-              >
-                {documentTypeList.map((item) => (
-
-                  <MenuItem key={item.label} value={item.label}>{item.value}</MenuItem>
-                ))}
-
-              </Select>
-            </FormControl>
+            <TextField
+              fullWidth
+              label="Laporan Terkait"
+              margin="normal"
+              name="title"
+              onChange={(event) => { setDocTitle(event.target.value) }}
+              variant="outlined"
+            />
             <TextField
               fullWidth
               label="Deskripsi"
@@ -113,7 +106,7 @@ const Page = () => {
                 type="submit"
                 variant="contained"
               >
-                Request Dokumen
+                Ajukan Laporan
               </Button>
             </Box>
           </form>
