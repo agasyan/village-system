@@ -11,7 +11,8 @@ export const AccountPopover = (props) => {
 
   const handleSignOut = async () => {
 
-      localStorage.removeItem('token');
+      await localStorage.removeItem('token');
+      await localStorage.removeItem("userData")
 
       // Redirect to sign-in page
       Router

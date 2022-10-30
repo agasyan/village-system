@@ -34,6 +34,11 @@ const items = [
     title: 'Request Document'
   },
   {
+    href: '/lapor/request',
+    icon: (<ShoppingBagIcon fontSize="small" />),
+    title: 'Lapor Kemalingan'
+  },
+  {
     href: '/account',
     icon: (<UserIcon fontSize="small" />),
     title: 'Account'
@@ -75,6 +80,11 @@ const loggedInItems = [
     href: '/document/request',
     icon: (<ShoppingBagIcon fontSize="small" />),
     title: 'Request Document'
+  },
+  {
+    href: '/lapor/request',
+    icon: (<ShoppingBagIcon fontSize="small" />),
+    title: 'Lapor Kemalingan'
   },
   {
     href: '/account',
