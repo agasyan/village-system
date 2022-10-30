@@ -24,11 +24,6 @@ const items = [
     title: 'Dashboard'
   },
   {
-    href: '/issue/list',
-    icon: (<UsersIcon fontSize="small" />),
-    title: 'Laporan'
-  },
-  {
     href: '/document/request',
     icon: (<ShoppingBagIcon fontSize="small" />),
     title: 'Request Document'
@@ -37,6 +32,11 @@ const items = [
     href: '/lapor/request',
     icon: (<ShoppingBagIcon fontSize="small" />),
     title: 'Lapor Kemalingan'
+  },
+  {
+    href: '/lapor/list',
+    icon: (<UsersIcon fontSize="small" />),
+    title: 'List Laporan'
   },
   {
     href: '/account',
@@ -75,6 +75,11 @@ const loggedInItems = [
     href: '/customers',
     icon: (<UsersIcon fontSize="small" />),
     title: 'Customers'
+  },
+  {
+    href: '/lapor/list',
+    icon: (<UsersIcon fontSize="small" />),
+    title: 'List Laporan'
   },
   {
     href: '/document/request',
