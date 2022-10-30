@@ -3,7 +3,6 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import {
-  Avatar,
   Box,
   Card,
   Checkbox,
@@ -15,7 +14,6 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
-import { getInitials } from '../../utils/get-initials';
 
 export const CustomerListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
@@ -62,6 +60,11 @@ export const CustomerListResults = ({ customers, ...rest }) => {
     setPage(newPage);
   };
 
+  const formatDate = (time) => {
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+    return new Date(time*1000).toLocaleDateString("en-US", options)
+  }
+
   return (
     <Card {...rest}>
       <PerfectScrollbar>
@@ -81,19 +84,28 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                   />
                 </TableCell>
                 <TableCell>
-                  Name
+                  Creator
                 </TableCell>
                 <TableCell>
-                  Email
+                  Title
+                </TableCell>
+                <TableCell>
+                  Description
                 </TableCell>
                 <TableCell>
                   Location
                 </TableCell>
                 <TableCell>
-                  Phone
+                  Status
                 </TableCell>
                 <TableCell>
-                  Registration date
+                  Created date
+                </TableCell>
+                <TableCell>
+                  Updated Date
+                </TableCell>
+                <TableCell>
+                  Updated By
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -112,37 +124,40 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                     />
                   </TableCell>
                   <TableCell>
+                    {customer.created_user.full_name}
+                  </TableCell>
+                  <TableCell>
                     <Box
                       sx={{
                         alignItems: 'center',
                         display: 'flex'
                       }}
                     >
-                      <Avatar
-                        src={customer.avatarUrl}
-                        sx={{ mr: 2 }}
-                      >
-                        {getInitials(customer.name)}
-                      </Avatar>
                       <Typography
                         color="textPrimary"
                         variant="body1"
                       >
-                        {customer.name}
+                        {customer.title}
                       </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {customer.email}
+                    {customer.deskripsi}
                   </TableCell>
                   <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                    {customer.alamat}
                   </TableCell>
                   <TableCell>
-                    {customer.phone}
+                    {customer.laporan_status.laporan_status_name}
                   </TableCell>
                   <TableCell>
-                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                    {formatDate(customer.created_at_utc)}
+                  </TableCell>
+                  <TableCell>
+                    {formatDate(customer.updated_at_utc)}
+                  </TableCell>
+                  <TableCell>
+                    {customer.updated_user.full_name}
                   </TableCell>
                 </TableRow>
               ))}
