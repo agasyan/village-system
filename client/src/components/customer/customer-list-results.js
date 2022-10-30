@@ -60,6 +60,11 @@ export const CustomerListResults = ({ customers, ...rest }) => {
     setPage(newPage);
   };
 
+  const formatDate = (time) => {
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+    return new Date(time*1000).toLocaleDateString("en-US", options)
+  }
+
   return (
     <Card {...rest}>
       <PerfectScrollbar>
@@ -79,6 +84,9 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                   />
                 </TableCell>
                 <TableCell>
+                  Creator
+                </TableCell>
+                <TableCell>
                   Title
                 </TableCell>
                 <TableCell>
@@ -92,6 +100,12 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                 </TableCell>
                 <TableCell>
                   Created date
+                </TableCell>
+                <TableCell>
+                  Updated Date
+                </TableCell>
+                <TableCell>
+                  Updated By
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -110,6 +124,9 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                     />
                   </TableCell>
                   <TableCell>
+                    {customer.created_user.full_name}
+                  </TableCell>
+                  <TableCell>
                     <Box
                       sx={{
                         alignItems: 'center',
@@ -125,7 +142,7 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {customer.description}
+                    {customer.deskripsi}
                   </TableCell>
                   <TableCell>
                     {`${customer.address}`}
@@ -134,7 +151,13 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                     {customer.status}
                   </TableCell>
                   <TableCell>
-                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                    {formatDate(customer.created_at_utc)}
+                  </TableCell>
+                  <TableCell>
+                    {formatDate(customer.updated_at_utc)}
+                  </TableCell>
+                  <TableCell>
+                    {customer.updated_user.full_name}
                   </TableCell>
                 </TableRow>
               ))}

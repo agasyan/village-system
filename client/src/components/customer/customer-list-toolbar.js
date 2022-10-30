@@ -20,7 +20,7 @@ export const CustomerListToolbar = (props) => (
         sx={{ m: 1 }}
         variant="h4"
       >
-        List Issue
+        List Laporan
       </Typography>
       <Box sx={{ m: 1 }}>
         <Button

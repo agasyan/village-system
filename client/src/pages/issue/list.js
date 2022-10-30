@@ -8,10 +8,10 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 const Page = () => {
-  const [issueList, setIssueList] = useState(customers);
+  const [issueList, setIssueList] = useState([]);
   const fetchData = () => {
     axios
-      .get('https://desa.agasyan.my.id/api/issue/all')
+      .get('https://desa.agasyan.my.id/api/laporan/all')
       .then((response) => {
         const { data } = response;
         console.log(data)
