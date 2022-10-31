@@ -14,6 +14,7 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
+import Router from 'next/router';
 
 export const CustomerListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
@@ -114,6 +115,7 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                 <TableRow
                   hover
                   key={customer.id}
+                  onClick={() => Router.push(`/lapor/edit?id=${customer.id}`)}
                   selected={selectedCustomerIds.indexOf(customer.id) !== -1}
                 >
                   <TableCell padding="checkbox">

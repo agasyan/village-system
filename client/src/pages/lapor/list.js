@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { Box, Container } from '@mui/material';
 import { CustomerListResults } from '../../components/customer/customer-list-results';
-import { CustomerListToolbar } from '../../components/customer/customer-list-toolbar';
+import { ReportListToolbar } from '../../components/customer/report-list-toolbar';
 import { DashboardLayout } from '../../components/dashboard-layout';
 import { customers } from '../../__mocks__/customers';
 import axios from 'axios';
@@ -19,7 +19,7 @@ const Page = () => {
           //check the api call is success by stats code 200,201 ...etc
           setIssueList(data.sort((a, b) => (a.created_at_utc < b.created_at_utc) ? 1 : -1))
         } else {
-          //error handle section 
+          //error handle section
         }
       })
       .catch((error) => console.log(error));
@@ -43,7 +43,7 @@ const Page = () => {
         }}
       >
         <Container maxWidth={false}>
-          <CustomerListToolbar />
+          <ReportListToolbar />
           <Box sx={{ mt: 3 }}>
             <CustomerListResults customers={issueList} />
           </Box>
