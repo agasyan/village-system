@@ -1,4 +1,5 @@
 from typing import Union,List
+
 from models import DocumentType as ModelDT, DocumentStatus as ModelDS, User as ModelUser, Document as ModelDocument
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
@@ -50,7 +51,8 @@ async def get_all_doc():
     for d in docs:
         out = await helper_add(d)
         out_list.append(out) 
-    return out_list
+    new_list = sorted(out_list, key=lambda x: x.id, reverse=True)
+    return new_list
 
 @router.get("/all/{user_id}",response_model=List[DocumentOutput])
 async def get_all_doc_by_user_id(user_id: int):
@@ -59,7 +61,8 @@ async def get_all_doc_by_user_id(user_id: int):
     for d in docs:
         out = await helper_add(d)
         out_list.append(out) 
-    return out_list
+    new_list = sorted(out_list, key=lambda x: x.id, reverse=True)
+    return new_list
 
 @router.get("/all/{status_id}",response_model=List[DocumentOutput])
 async def get_all_doc_by_status_id(status_id: int):
@@ -68,7 +71,8 @@ async def get_all_doc_by_status_id(status_id: int):
     for d in docs:
         out = await helper_add(d)
         out_list.append(out) 
-    return out_list
+    new_list = sorted(out_list, key=lambda x: x.id, reverse=True)
+    return new_list
 
 @router.get("/all/{type_id}",response_model=List[DocumentOutput])
 async def get_all_doc_by_status_id(type_id: int):
@@ -77,7 +81,8 @@ async def get_all_doc_by_status_id(type_id: int):
     for d in docs:
         out = await helper_add(d)
         out_list.append(out) 
-    return out_list
+    new_list = sorted(out_list, key=lambda x: x.id, reverse=True)
+    return new_list
 
 @router.get("/{id}", response_model=DocumentOutput)
 async def get_doc_by_id(id: int):
