@@ -17,8 +17,8 @@ const config = {
 const Login = () => {
   const formik = useFormik({
     initialValues: {
-      username: 'string',
-      password: 'string'
+      username: '',
+      password: ''
     },
     validationSchema: Yup.object({
       username: Yup

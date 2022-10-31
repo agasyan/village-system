@@ -2,10 +2,12 @@ import {
   Box,
   Button,Typography
 } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import { Upload as UploadIcon } from '../../icons/upload';
 import { Download as DownloadIcon } from '../../icons/download';
+import Router from 'next/router';
 
-export const CustomerListToolbar = (props) => (
+export const ReportListToolbar = (props) => (
   <Box {...props}>
     <Box
       sx={{
@@ -23,7 +25,7 @@ export const CustomerListToolbar = (props) => (
         List Laporan
       </Typography>
       <Box sx={{ m: 1 }}>
-        <Button
+        {/* <Button
           startIcon={(<UploadIcon fontSize="small" />)}
           sx={{ mr: 1 }}
         >
@@ -34,6 +36,13 @@ export const CustomerListToolbar = (props) => (
           sx={{ mr: 1 }}
         >
           Export
+        </Button> */}
+        <Button
+          startIcon={(<AddIcon />)}
+          sx={{ mr: 1 }}
+          onClick={() => Router.push('/lapor/request')}
+        >
+          Buat Laporan
         </Button>
       </Box>
     </Box>
