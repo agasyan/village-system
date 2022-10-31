@@ -111,7 +111,7 @@ export const CustomerListResults = ({ customers, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(page*limit, (page*limit)+limit).map((customer) => (
+              {customers.slice(0, limit).map((customer) => (
                 <TableRow
                   hover
                   key={customer.id}

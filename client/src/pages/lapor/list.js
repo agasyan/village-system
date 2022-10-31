@@ -17,7 +17,7 @@ const Page = () => {
         console.log(data)
         if (response.status === 200) {
           //check the api call is success by stats code 200,201 ...etc
-          setIssueList(data.sort((a, b) => (a.created_at_utc < b.created_at_utc) ? 1 : -1))
+          setIssueList(data)
         } else {
           //error handle section
         }
