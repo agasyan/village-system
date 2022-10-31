@@ -94,7 +94,8 @@ async def get_all_laporan():
             created_user=schemaUser(id=user_laporan_created.id,username=user_laporan_created.username,full_name=user_laporan_created.full_name),
             updated_user=schemaUser(id=user_laporan_updated.id,username=user_laporan_updated.username,full_name=user_laporan_updated.full_name))
         out_list.append(out)
-    return out_list
+    new_list = sorted(out_list, key=lambda x: x.id, reverse=True)
+    return new_list
 
 @router.get("/all/{user_id}",response_model=List[LaporanOut])
 async def get_all_laporan_by_user_id(user_id: int):
@@ -110,7 +111,8 @@ async def get_all_laporan_by_user_id(user_id: int):
             created_user=schemaUser(id=user_laporan_created.id,username=user_laporan_created.username,full_name=user_laporan_created.full_name),
             updated_user=schemaUser(id=user_laporan_updated.id,username=user_laporan_updated.username,full_name=user_laporan_updated.full_name))
         out_list.append(out)
-    return out_list
+    new_list = sorted(out_list, key=lambda x: x.id, reverse=True)
+    return new_list
 
 @router.get("/all/{status_id}",response_model=List[LaporanOut])
 async def get_all_laporan_by_status_id(status_id: int):
@@ -126,7 +128,8 @@ async def get_all_laporan_by_status_id(status_id: int):
             created_user=schemaUser(id=user_laporan_created.id,username=user_laporan_created.username,full_name=user_laporan_created.full_name),
             updated_user=schemaUser(id=user_laporan_updated.id,username=user_laporan_updated.username,full_name=user_laporan_updated.full_name))
         out_list.append(out)
-    return out_list
+    new_list = sorted(out_list, key=lambda x: x.id, reverse=True)
+    return new_list
 
 @router.get("/{id}", response_model=LaporanOut)
 async def get_laporan_by_id(id: int):
