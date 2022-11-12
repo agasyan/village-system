@@ -77,8 +77,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           username: ${{ secrets.SSH_USERNAME }}
           script: |
+            cp nginx/default.conf /etc/config/swag/nginx/site-confs/default.conf
+            cp nginx/nginx.conf /etc/config/swag/nginx/nginx.conf
             cd village-system
             docker-compose -f docker-compose.prod.yml up -d --force-recreate
             docker image prune -a -f
-            cp nginx/default.conf /etc/config/swag/nginx/site-confs/default.conf
-            cp nginx/nginx.conf /etc/config/swag/nginx/nginx.conf
