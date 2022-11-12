@@ -42,7 +42,7 @@ async def delete_laporan_status_by_id(id: int):
     if laporan_status == None:
         return JSONResponse(content={"error": "id not found"}, status_code=400)
     laporans = await ModelLaporan.get_by_laporan_status_id(id)
-    if laporans != None:
+    if len(laporans) != 0:
         laporan_ids = []
         for laporan in laporans:
             laporan_ids.append(laporan.id)
