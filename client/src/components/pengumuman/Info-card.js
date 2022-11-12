@@ -27,6 +27,9 @@ export const InfoCard = ({ info, ...rest }) => {
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
+    const handleSendIcon = () => {
+        
+    }
     return (<Card fullWidth {...rest}>
         <CardMedia
             component="img"
