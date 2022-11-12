@@ -34,7 +34,7 @@ async def delete_doc_status_by_id(id: int):
     if document_status == None:
         return JSONResponse(content={"error": "id not found"}, status_code=400)
     docs = await ModelDoc.get_by_document_status_id(id)
-    if docs != None:
+    if len(docs) != 0:
         doc_ids = []
         for doc in docs:
             doc_ids.append(doc.id)

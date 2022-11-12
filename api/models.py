@@ -99,6 +99,33 @@ laporan = sa.Table(
     extend_existing = True
 )
 
+pengumuman = sa.Table(
+    "pengumuman",
+    metadata,
+    sa.Column("id", sa.Integer, primary_key=True),
+    sa.Column("title", sa.String),
+    sa.Column("isi", sa.Text),
+    sa.Column("gambar", sa.String),
+    sa.Column("created_by", sa.ForeignKey("user.id"), nullable=False),
+    sa.Column("updated_by", sa.ForeignKey("user.id"), nullable=False),
+    sa.Column("created_at_epoch_utc", sa.Integer, nullable=False),
+    sa.Column("updated_at_epoch_utc", sa.Integer, nullable=False),
+    extend_existing = True
+)
+
+komentar_pengumuman = sa.Table(
+    "komentar_pengumuman",
+    metadata,
+    sa.Column("id", sa.Integer, primary_key=True),
+    sa.Column("title", sa.String),
+    sa.Column("isi", sa.Text),
+    sa.Column("pengumuman_id", sa.ForeignKey("pengumuman.id"), nullable=False),
+    sa.Column("created_by", sa.ForeignKey("user.id"), nullable=False),
+    sa.Column("created_at_epoch_utc", sa.Integer, nullable=False),
+    sa.Column("updated_at_epoch_utc", sa.Integer, nullable=False),
+    extend_existing = True
+)
+
 class DocumentType:
     @classmethod
     async def get(cls, id):
@@ -182,7 +209,7 @@ class Document:
 
     @classmethod
     async def get_by_user_id(cls, user_id):
-        query = document.select().where(document.c.user_id == user_id)
+        query = document.select().where(document.c.doc_user_id == user_id)
         return await db.fetch_all(query)
 
     @classmethod
@@ -413,7 +440,12 @@ class Laporan:
 
     @classmethod
     async def get_by_user_id(cls, user_id):
-        query = laporan.select().where(laporan.c.user_id == user_id)
+        query = laporan.select().where(laporan.c.created_by == user_id or laporan.c.updated_by == user_id)
+        return await db.fetch_all(query)
+    
+    @classmethod
+    async def get_by_user_id_create(cls, user_id):
+        query = laporan.select().where(laporan.c.created_by == user_id)
         return await db.fetch_all(query)
 
     @classmethod
@@ -431,3 +463,72 @@ class Laporan:
     async def update(cls, id, **lap):
         query = laporan.update().where(laporan.c.id == id).values(**lap)
         await db.execute(query)
+
+class Pengumuman:
+    @classmethod
+    async def get(cls, id):
+        query = pengumuman.select().where(pengumuman.c.id == id)
+        return await db.fetch_one(query)
+    
+    @classmethod
+    async def get_all(cls):
+        query = pengumuman.select()
+        return await db.fetch_all(query)
+
+    @classmethod
+    async def create(cls, **lap):
+        query = pengumuman.insert().values(**lap)
+        pengumuman_id = await db.execute(query)
+        return pengumuman_id
+    
+    @classmethod
+    async def delete(cls, id):
+        query = pengumuman.delete().where(pengumuman.c.id == id)
+        await db.execute(query)
+    
+    @classmethod
+    async def update(cls, id, **lap):
+        query = pengumuman.update().where(pengumuman.c.id == id).values(**lap)
+        await db.execute(query)
+    
+    @classmethod
+    async def get_by_user_id(cls, user_id):
+        query = pengumuman.select().where(pengumuman.c.created_by == user_id or pengumuman.c.updated_by == user_id)
+        return await db.fetch_all(query)
+
+class KomentarPengumuman:
+    @classmethod
+    async def get(cls, id):
+        query = komentar_pengumuman.select().where(komentar_pengumuman.c.id == id)
+        return await db.fetch_one(query)
+    
+    @classmethod
+    async def get_all(cls):
+        query = komentar_pengumuman.select()
+        return await db.fetch_all(query)
+    
+    @classmethod
+    async def get_by_pengumuman_id(cls, pengumuman_id):
+        query = komentar_pengumuman.select().where(komentar_pengumuman.c.pengumuman_id == pengumuman_id)
+        return await db.fetch_all(query)
+
+    @classmethod
+    async def create(cls, **lap):
+        query = komentar_pengumuman.insert().values(**lap)
+        komentar_pengumuman_id = await db.execute(query)
+        return komentar_pengumuman_id
+    
+    @classmethod
+    async def delete(cls, id):
+        query = komentar_pengumuman.delete().where(komentar_pengumuman.c.id == id)
+        await db.execute(query)
+    
+    @classmethod
+    async def update(cls, id, **lap):
+        query = komentar_pengumuman.update().where(komentar_pengumuman.c.id == id).values(**lap)
+        await db.execute(query)
+    
+    @classmethod
+    async def get_by_user_id(cls, user_id):
+        query = komentar_pengumuman.select().where(komentar_pengumuman.c.created_by == user_id)
+        return await db.fetch_all(query)

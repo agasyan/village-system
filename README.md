@@ -8,8 +8,12 @@ docker-compose up --build --force-recreate
 ```
 
 ## Desc
-
-Python (OPEN API)-REACT-NGINX-DOCKER-GITHUB Actions
+Simple village web system with:
+- Python (Fast API)
+- Node JS (Express)
+- NGINX (Swag)
+- DOCKER (Docker Compose And Swarm)
+- GITHUB Actions
 
 
 ## Refernces

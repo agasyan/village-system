@@ -35,12 +35,12 @@ async def delete_role_by_id(role_id: int):
         return JSONResponse(content={"error": "Roles id not found"}, status_code=400)
     user_roles = await ModelUserRole.get_by_role_id(role_id)
     role_pages = await ModelRolePage.get_by_role_id(role_id)
-    if role_pages != None:
+    if len(role_pages) != 0:
         page_ids = []
         for rp in role_pages:
             page_ids.append(rp.page_id)
         return JSONResponse(content={"error": "Roles still used", "page_ids": page_ids}, status_code=400)
-    if user_roles != None:
+    if len(user_roles) != 0:
         user_ids = []
         for ur in user_roles:
             user_ids.append(ur.user_id)

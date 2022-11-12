@@ -68,7 +68,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           key: ${{ secrets.SSH_KEY }}
           username: ${{ secrets.SSH_USERNAME }}
-          source: "docker-compose.prod.yml,.env"
+          source: "docker-compose.prod.yml,.env,nginx/default.conf,nginx/nginx.conf"
           target: "village-system"
       - name: Re-run Docker Compose and remove unused image
         uses: appleboy/ssh-action@v0.1.5
@@ -78,5 +78,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           script: |
             cd village-system
+            cp nginx/default.conf /etc/config/swag/nginx/site-confs/default.conf
+            cp nginx/nginx.conf /etc/config/swag/nginx/nginx.conf
             docker-compose -f docker-compose.prod.yml up -d --force-recreate
             docker image prune -a -f

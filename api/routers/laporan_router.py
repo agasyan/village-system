@@ -1,6 +1,5 @@
 import datetime
 import calendar
-import string
 
 from typing import  Union, List
 from models import LaporanStatus as ModelLS, User as ModelUser, Laporan as ModelLaporan
@@ -148,8 +147,8 @@ async def get_laporan_by_id(id: int):
 
 @router.delete("/{id}")
 async def delete_laporan_by_id(id: int):
-    laporan_type = await ModelLaporan.get(id)
-    if laporan_type == None:
+    laporan = await ModelLaporan.get(id)
+    if laporan == None:
         return JSONResponse(content={"error": "id not found"}, status_code=400)
     await ModelLaporan.delete(id)
     return JSONResponse(content={"id": id, "message": "Success Delete Laporan ID"}, status_code=200)
