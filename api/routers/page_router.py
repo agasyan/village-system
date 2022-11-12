@@ -34,7 +34,7 @@ async def delete_page_by_id(page_id: int):
     if page == None:
         return JSONResponse(content={"error": "pages id not found"}, status_code=400)
     role_pages = await ModelRolePage.get_by_page_id(page_id)
-    if role_pages != None:
+    if len(role_pages) != 0:
         role_ids = []
         for rp in role_pages:
             role_ids.append(rp.page_id)

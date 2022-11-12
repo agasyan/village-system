@@ -8,7 +8,7 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 
-from models import User as ModelUser, Role as ModelRole, UserRole as ModelUserRole, RolePage as ModelRP, Page as ModelPage, Document as ModelDoc
+from models import User as ModelUser, Role as ModelRole, UserRole as ModelUserRole, RolePage as ModelRP, Page as ModelPage, Document as ModelDoc, Laporan as ModelLap, Pengumuman as ModelPengumuman, KomentarPengumuman as ModelKP
 from schema import RoleOut as SchemaRoleOutput, PageOut as SchemaPageOut
 from routers.token_router import TokenData as SchemaTokenData
 
@@ -112,11 +112,29 @@ async def delete_user_by_id(id: int):
     if user == None:
         return JSONResponse(content={"error": "user id not found"}, status_code=400)
     docs = await ModelDoc.get_by_user_id(id)
-    if docs != None:
+    if len(docs) != 0:
         doc_ids = []
         for doc in docs:
             doc_ids.append(doc.id)
         return JSONResponse(content={"error": "User have document and still used", "doc_ids": doc_ids}, status_code=400)
+    laporans = await ModelLap.get_by_user_id(id)
+    if len(laporans) != 0:
+        laporan_ids = []
+        for doc in laporans:
+            laporan_ids.append(doc.id)
+        return JSONResponse(content={"error": "User have Laporan and still used", "laporan_ids": laporan_ids}, status_code=400)
+    pengumumans = await ModelPengumuman.get_by_user_id(id)
+    if len(pengumumans) != 0:
+        penguman_ids = []
+        for doc in pengumumans:
+            penguman_ids.append(doc.id)
+        return JSONResponse(content={"error": "User have pengumuman and still used", "penguman_ids": penguman_ids}, status_code=400)
+    komentar_pengumans = await ModelKP.get_by_user_id(id)
+    if len(komentar_pengumans) != 0:
+        kp_ids = []
+        for kp in komentar_pengumans:
+            kp_ids.append(kp.id)
+        return JSONResponse(content={"error": "User have komentar pengumuman and still used", "komentar_pengumuman_ids": kp_ids}, status_code=400)
     await ModelUserRole.delete_by_user_id(id)
     await ModelUser.delete(id)
     return JSONResponse(content={"message": "Success Delete User"}, status_code=200)
