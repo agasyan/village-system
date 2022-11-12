@@ -1,7 +1,8 @@
 import Head from 'next/head';
-import { Box, Container } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import { DashboardLayout } from '../components/dashboard-layout';
 import { PengumumanList } from '../components/pengumuman/pengumuman-list';
+import { pengumuman } from '../__mocks__/pengumuman';
 
 const Page = () => (
   <>
@@ -18,8 +19,10 @@ const Page = () => (
       }}
     >
       <Container maxWidth={false}>
-        <Box sx={{mt:3}}>
-          <PengumumanList />
+      
+        <Typography variant="h3">Pengumuman</Typography>
+        <Box sx={{ mt: 3 }}>
+          <PengumumanList pengumumans={pengumuman} />
         </Box>
       </Container>
     </Box>
