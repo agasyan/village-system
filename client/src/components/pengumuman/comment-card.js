@@ -2,12 +2,6 @@ import { Avatar, Card, CardContent, CardHeader, IconButton, Typography } from "@
 import { red } from '@mui/material/colors';
 
 export const CommentCard = ({ comment, ...rest }) => {
-    const randomColor = () => {
-        let hex = Math.floor(Math.random() * 0xFFFFFF);
-        let color = "#" + hex.toString(16);
-
-        return color;
-    }
     const formatDate = (time) => {
         var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
         return new Date(time*1000).toLocaleDateString("en-US", options)
@@ -17,17 +11,17 @@ export const CommentCard = ({ comment, ...rest }) => {
             <CardHeader
                 avatar={
                     <Avatar style={{
-                        backgroundColor: randomColor()
+                        backgroundColor: comment.color
                     }} aria-label="comment author">
-                        {comment.author.charAt(0)}
+                        {comment.created_user.full_name.charAt(0)}
                     </Avatar>
                 }
-                title={comment.author}
-                subheader={formatDate(comment.created_at)}
+                title={comment.created_user.full_name}
+                subheader={formatDate(comment.updated_at_utc)}
             />
             <CardContent>
                 <Typography variant="body2" color="text.secondary">
-                    {comment.content}
+                    {comment.isi}
                 </Typography>
             </CardContent>
         </Card >
