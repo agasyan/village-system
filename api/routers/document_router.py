@@ -28,6 +28,13 @@ class DocumentInput(BaseModel):
     doc_type_id: int
     doc_user_id: int
 
+class DocumentUpdate(BaseModel):
+    judul: Union[str, None] = None
+    deskripsi: Union[str, None] = None
+    doc_status_id: Union[int, None] = None
+    doc_type_id: Union[int, None] = None
+    doc_user_id: Union[int, None] = None
+
 router =  APIRouter()
 
 @router.post("", status_code=201)
@@ -86,10 +93,11 @@ async def get_all_doc_by_status_id(type_id: int):
 
 @router.get("/{id}", response_model=DocumentOutput)
 async def get_doc_by_id(id: int):
-    document_type = await ModelDocument.get(id)
-    if document_type == None:
+    document = await ModelDocument.get(id)
+    if document == None:
         return JSONResponse(content={"error": "id not found"}, status_code=400)
-    return document_type
+    out = await helper_add(document)
+    return out
 
 @router.delete("/{id}")
 async def delete_doc_by_id(id: int):
@@ -100,21 +108,38 @@ async def delete_doc_by_id(id: int):
     return document_type_id
 
 @router.put("/{id}")
-async def update_document(id: int, updated_doc: DocumentInput):
-    curr_dt = await ModelDocument.get(id)
-    if curr_dt == None:
+async def update_document(id: int, updated_doc: DocumentUpdate):
+    curr_doc = await ModelDocument.get(id)
+    if curr_doc == None:
         return JSONResponse(content={"error": "id not found"}, status_code=400)
-    check_dt = await ModelDT.get(updated_doc.doc_type_id)
-    if check_dt == None:
-        return JSONResponse(content={"error": "Document Types not exist"}, status_code=400)
-    check_ds = await ModelDS.get(updated_doc.doc_status_id)
-    if check_ds == None:
-        return JSONResponse(content={"error": "Document Statuses not exist"}, status_code=400)
-    check_user = await ModelUser.get(updated_doc.doc_user_id)
-    if check_user == None:
-        return JSONResponse(content={"error": "User ID not exist"}, status_code=400)
-    await ModelDocument.update(id, **updated_doc.dict())
-    return JSONResponse(content={"id": id, "message": "Success Update Document Type"}, status_code=200)
+    if updated_doc.judul != None:
+        curr_doc.judul = updated_doc.judul
+    if updated_doc.deskripsi != None:
+        curr_doc.deskripsi = updated_doc.deskripsi
+    if updated_doc.doc_type_id != None:
+        check_dt = await ModelDT.get(updated_doc.doc_type_id)
+        if check_dt == None:
+            return JSONResponse(content={"error": "Document Types not exist"}, status_code=400)
+        curr_doc.doc_type_id = updated_doc.doc_type_id
+    if updated_doc.doc_status_id != None:
+        check_ds = await ModelDS.get(updated_doc.doc_status_id)
+        if check_ds == None:
+            return JSONResponse(content={"error": "Document Statuses not exist"}, status_code=400)
+        curr_doc.doc_status_id = updated_doc.doc_status_id
+    if updated_doc.doc_user_id != None:
+        check_user = await ModelUser.get(updated_doc.doc_user_id)
+        if check_user == None:
+            return JSONResponse(content={"error": "User ID not exist"}, status_code=400)
+        curr_doc.doc_user_id = updated_doc.doc_user_id
+    newDoc = DocumentInput(
+        judul=curr_doc.judul,
+        deskripsi=curr_doc.deskripsi,
+        doc_status_id=curr_doc.doc_status_id,
+        doc_type_id=curr_doc.doc_type_id,
+        doc_user_id=curr_doc.doc_user_id
+    )
+    await ModelDocument.update(id, **newDoc.dict())
+    return JSONResponse(content={"id": id, "message": "Success Update Document"}, status_code=200)
 
 async def helper_add(doc):
     user_doc = await ModelUser.get_by_user_id(doc.doc_user_id)
