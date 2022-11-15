@@ -23,7 +23,7 @@ const Page = () => {
   
   const [docTitle, setDocTitle] = useState("")
   const [docType, setDocType] = useState("")
-  const [docStatus, setDocStatus] = useState(0)
+  const [docStatus, setDocStatus] = useState("")
   const [description, setDescription] = useState("")
   const router = useRouter()
   const { id } = router.query;
@@ -37,8 +37,6 @@ const Page = () => {
           setDocDetail(data)
           setDocTitle(data.judul)
           setDescription(data.deskripsi)
-          setDocStatus(data.doc_status.id)
-          setDocType(data.doc_type.id)
         } else {
           //error handle section
         }
@@ -55,6 +53,7 @@ const Page = () => {
         if (response.status === 200) {
           //check the api call is success by stats code 200,201 ...etc
           setDocStatusList(data)
+          setDocStatus(data.find(it => it.id === docDetail.doc_status.id))
         } else {
           //error handle section
         }
@@ -71,6 +70,7 @@ const Page = () => {
         if (response.status === 200) {
           //check the api call is success by stats code 200,201 ...etc
           setDocumentTypeList(data)
+          setDocType(data.find(it => it.id === docDetail.doc_type.id))
         } else {
           //error handle section
         }
@@ -90,10 +90,6 @@ const Page = () => {
       })
       .then(() => {
         alert("Berhasil mengubah dokumen status")
-        setDocTitle("")
-        setDescription("")
-        setAddress("")
-        setDocType("")
         Router.push("/document/list")
       })
       .catch((error) => console.log(error));
@@ -165,7 +161,7 @@ const Page = () => {
               >
                 {documentTypeList.map((item) => (
 
-                  <MenuItem key={item.id} value={item.name}>{item.name}</MenuItem>
+                  <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
                 ))}
 
               </Select>
@@ -174,14 +170,15 @@ const Page = () => {
             <FormControl fullWidth>
               <Select
                 hiddenLabel
-                value={docType}
+                value={docStatus}
                 onChange={(event) => {
-                  setDocStatus(event.target.value);
+                  let status = event.target.value;
+                  setDocStatus(status);
                 }}
               >
                 {docStatusList.map((item) => (
 
-                  <MenuItem key={item.id} value={item.name}>{item.name}</MenuItem>
+                  <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
                 ))}
 
               </Select>
