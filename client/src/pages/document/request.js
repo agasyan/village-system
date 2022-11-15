@@ -102,7 +102,7 @@ const Page = () => {
             </FormControl>
             <TextField
               fullWidth
-              label="Judul pengajual"
+              label="Judul pengajuan"
               margin="normal"
               name="judul"
               onChange={(event) => { setDocTitle(event.target.value) }}
