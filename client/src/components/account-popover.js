@@ -3,7 +3,7 @@ import Router from 'next/router';
 import PropTypes from 'prop-types';
 import { Box, MenuItem, MenuList, Popover, Typography } from '@mui/material';
 import { AuthContext } from '../contexts/auth-context';
-import { auth, ENABLE_AUTH } from '../lib/auth';
+import { auth, ENABLE_AUTH, getUserData} from '../lib/auth';
 
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open, ...other } = props;
@@ -63,7 +63,7 @@ export const AccountPopover = (props) => {
           color="text.secondary"
           variant="body2"
         >
-          John Doe
+          {getUserData() ? getUserData().full_name : ""}
         </Typography>
       </Box>
       <MenuList
