@@ -91,8 +91,6 @@ const Page = () => {
                 value={docType}
                 onChange={(event) => {
                   setDocType(event.target.value);
-                  const selectedDocumentType = documentTypeList.find(it => it.label === event.target.value);
-                  setDocTitle(selectedDocumentType.value)
                 }}
               >
                 {documentTypeList.map((item) => (
@@ -102,6 +100,14 @@ const Page = () => {
 
               </Select>
             </FormControl>
+            <TextField
+              fullWidth
+              label="Judul pengajual"
+              margin="normal"
+              name="judul"
+              onChange={(event) => { setDocTitle(event.target.value) }}
+              variant="outlined"
+            />
             <TextField
               fullWidth
               label="Dokumen Pendukung (link google drive)"
