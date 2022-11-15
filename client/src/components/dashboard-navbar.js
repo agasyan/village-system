@@ -109,18 +109,24 @@ export const DashboardNavbar = (props) => {
               </Badge>
             </IconButton>
           </Tooltip> */}
-          <Avatar
-            onClick={() => setOpenAccountPopover(true)}
-            ref={settingsRef}
-            sx={{
-              cursor: 'pointer',
-              height: 40,
-              width: 40,
-              ml: 1
-            }}
-          >
-            {getUserData().full_name[0]}
-          </Avatar>
+
+          {
+            getUserData() && (
+              <Avatar
+              onClick={() => setOpenAccountPopover(true)}
+              ref={settingsRef}
+              sx={{
+                cursor: 'pointer',
+                height: 40,
+                width: 40,
+                ml: 1
+              }}
+            >
+              {getUserData().full_name[0]}
+            </Avatar>
+            )
+          }
+
         </Toolbar>
       </DashboardNavbarRoot>
       <AccountPopover

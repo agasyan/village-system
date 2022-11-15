@@ -23,11 +23,11 @@ const items = [
     icon: (<ChartBarIcon fontSize="small" />),
     title: 'Dashboard'
   },
-  {
-    href: '/document/request',
-    icon: (<ShoppingBagIcon fontSize="small" />),
-    title: 'Request Document'
-  },
+  // {
+  //   href: '/document/request',
+  //   icon: (<ShoppingBagIcon fontSize="small" />),
+  //   title: 'Request Document'
+  // },
   // {
   //   href: '/lapor/request',
   //   icon: (<ShoppingBagIcon fontSize="small" />),
@@ -43,26 +43,26 @@ const items = [
   //   icon: (<UserIcon fontSize="small" />),
   //   title: 'Account'
   // },
-  {
-    href: '/settings',
-    icon: (<CogIcon fontSize="small" />),
-    title: 'Settings'
-  },
+  // {
+  //   href: '/settings',
+  //   icon: (<CogIcon fontSize="small" />),
+  //   title: 'Settings'
+  // },
   {
     href: '/login',
     icon: (<LockIcon fontSize="small" />),
     title: 'Login'
   },
-  {
-    href: '/register',
-    icon: (<UserAddIcon fontSize="small" />),
-    title: 'Register'
-  },
-  {
-    href: '/404',
-    icon: (<XCircleIcon fontSize="small" />),
-    title: 'Error'
-  }
+  // {
+  //   href: '/register',
+  //   icon: (<UserAddIcon fontSize="small" />),
+  //   title: 'Register'
+  // },
+  // {
+  //   href: '/404',
+  //   icon: (<XCircleIcon fontSize="small" />),
+  //   title: 'Error'
+  // }
 ];
 
 const loggedInItems = [
@@ -82,9 +82,9 @@ const loggedInItems = [
     title: 'Laporan Kemalingan'
   },
   {
-    href: '/document/request',
+    href: '/document/list',
     icon: (<ShoppingBagIcon fontSize="small" />),
-    title: 'Request Document'
+    title: 'Pengajuan Dokumen'
   },
   // {
   //   href: '/lapor/request',

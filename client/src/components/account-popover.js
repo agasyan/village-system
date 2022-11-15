@@ -63,7 +63,7 @@ export const AccountPopover = (props) => {
           color="text.secondary"
           variant="body2"
         >
-          {getUserData().full_name}
+          {getUserData() ? getUserData().full_name : ""}
         </Typography>
       </Box>
       <MenuList
