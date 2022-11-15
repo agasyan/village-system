@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 
 const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
+  avatar: '',
   city: 'Los Angeles',
   country: 'USA',
   jobTitle: 'Senior Developer',

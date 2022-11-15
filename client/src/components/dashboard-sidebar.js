@@ -28,21 +28,21 @@ const items = [
     icon: (<ShoppingBagIcon fontSize="small" />),
     title: 'Request Document'
   },
-  {
-    href: '/lapor/request',
-    icon: (<ShoppingBagIcon fontSize="small" />),
-    title: 'Lapor Kemalingan'
-  },
+  // {
+  //   href: '/lapor/request',
+  //   icon: (<ShoppingBagIcon fontSize="small" />),
+  //   title: 'Lapor Kemalingan'
+  // },
   {
     href: '/lapor/list',
     icon: (<UsersIcon fontSize="small" />),
     title: 'List Laporan'
   },
-  {
-    href: '/account',
-    icon: (<UserIcon fontSize="small" />),
-    title: 'Account'
-  },
+  // {
+  //   href: '/account',
+  //   icon: (<UserIcon fontSize="small" />),
+  //   title: 'Account'
+  // },
   {
     href: '/settings',
     icon: (<CogIcon fontSize="small" />),
@@ -71,36 +71,36 @@ const loggedInItems = [
     icon: (<ChartBarIcon fontSize="small" />),
     title: 'Dashboard'
   },
-  {
-    href: '/customers',
-    icon: (<UsersIcon fontSize="small" />),
-    title: 'Customers'
-  },
+  // {
+  //   href: '/customers',
+  //   icon: (<UsersIcon fontSize="small" />),
+  //   title: 'Customers'
+  // },
   {
     href: '/lapor/list',
     icon: (<UsersIcon fontSize="small" />),
-    title: 'List Laporan'
+    title: 'Laporan Kemalingan'
   },
   {
     href: '/document/request',
     icon: (<ShoppingBagIcon fontSize="small" />),
     title: 'Request Document'
   },
-  {
-    href: '/lapor/request',
-    icon: (<ShoppingBagIcon fontSize="small" />),
-    title: 'Lapor Kemalingan'
-  },
-  {
-    href: '/account',
-    icon: (<UserIcon fontSize="small" />),
-    title: 'Account'
-  },
-  {
-    href: '/settings',
-    icon: (<CogIcon fontSize="small" />),
-    title: 'Settings'
-  },
+  // {
+  //   href: '/lapor/request',
+  //   icon: (<ShoppingBagIcon fontSize="small" />),
+  //   title: 'Lapor Kemalingan'
+  // },
+  // {
+  //   href: '/account',
+  //   icon: (<UserIcon fontSize="small" />),
+  //   title: 'Account'
+  // },
+  // {
+  //   href: '/settings',
+  //   icon: (<CogIcon fontSize="small" />),
+  //   title: 'Settings'
+  // },
 ];
 
 export const DashboardSidebar = (props) => {
@@ -168,15 +168,13 @@ export const DashboardSidebar = (props) => {
                   color="inherit"
                   variant="subtitle1"
                 >
-                  Acme Inc
+                  SIDES
                 </Typography>
                 <Typography
                   color="neutral.400"
                   variant="body2"
                 >
-                  Your tier
-                  {' '}
-                  : Premium
+                  Sistem Informasi Desa
                 </Typography>
               </div>
               <SelectorIcon
